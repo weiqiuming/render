@@ -36,6 +36,19 @@ void VulkanRenderer :: initRenderer() {
         LOGI("Using gpu 0!");
         gpu = gpus[0];
 
+        VkPhysicalDeviceMemoryProperties memoryProperties;
+        vkGetPhysicalDeviceMemoryProperties(gpu, &memoryProperties);
+        LOGI("Memory Types:");
+        for (uint32_t i = 0; i < memoryProperties.memoryTypeCount; i++) {
+            const VkMemoryType& type = memoryProperties.memoryTypes[i];
+            LOGI("%d: propertyFlags-0x%x,heapIndex-%d",i,type.propertyFlags, type.heapIndex);
+        }
+        LOGI("Memory Heaps:");
+        for (uint32_t i = 0; i < memoryProperties.memoryHeapCount; i++) {
+            const VkMemoryHeap& heap = memoryProperties.memoryHeaps[i];
+            LOGI("%d: size-0x%" PRIx64 ",flags-0x%x",i,heap.size, heap.flags);
+        }
+
         VkPhysicalDeviceProperties deviceProperties;
         vkGetPhysicalDeviceProperties(gpu, &deviceProperties);
         LOGI("deviceName is %s", deviceProperties.deviceName);
